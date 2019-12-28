@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Lista funciones{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated%}
+<p>Bienvenido(a), {{user}}</p>
+{% endif %}
+{% if user.is_superuser%}
+<a href="{% url 'crear-pelicula' %}" class="btn btn-info">Agregar Pelicula</a>
+<a href="{% url 'crear-funcion' %}" class="btn btn-info">Agregar Función</a>
+{%endif%}
+
+<h3 class="text-center mt-2">LISTA DE FUNCIONES</h3>
+<div class="row mb-4">
+    {% for object in object_list%}
+    <div class="card col-md-4 mt-4 text-center">
+        <div class="card-header">
+            <h5>{{object.pelicula|title}}</h5>
+            <span class="badge badge-pill badge-warning">Cupos disponibles: {{object.cupos}}</span>
+            {% if object.estado == "Cancelada"%}
+            <span class="badge badge-pill badge-danger">Estado: {{object.estado}}</span>
+            {%else%}
+            <span class="badge badge-pill badge-success">Estado: {{object.estado}}</span>
+            {%endif%}
+        </div>
+        <div class="card-body">
+            <p>
+                <strog>Horario</strog>
+            </p>
+            <p>{{ object.fecha_inicio }} - {{ object.fecha_fin }}</p>
+            <p>Lugar: {{object.lugar}}</p>
+            <p>Dirección: {{object.direccion}}</p>
+        </div>
+        <div class="card-footer">
+            {% if object.estado != "Cancelada"%}
+            {% if not user.is_superuser %}
+            <form method="post" action="{% url 'solicitar-funcion' object.pk%}">{% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control-sm d-inline w-25" type="number" id="numCupos" name="numCupos">
+                    <input class="btn btn-warning text-white btn-sm btnCupon" type="submit" value="solicitar">
+                </div>
+            </form>
+            {% else %}
+            <div class="mt-2">
+                <a class="btn btn-success" href="{% url 'detalles-funcion' object.id %}"><i class="fas fa-eye"></i></a>
+                <a class="btn btn-danger" href="{% url 'editar-funcion' object.id %}"><i
+                        class="fas fa-pencil-alt"></i></a>
+                <a class="btn btn-primary" href="{% url 'elminar-funcion' object.id %}"><i class="fas fa-ban"></i></a>
+            </div>
+            {% endif %}
+            {%endif%}
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+

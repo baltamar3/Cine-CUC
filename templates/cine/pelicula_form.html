@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Eliminar Función{% endblock %}
+
+{% block content %}
+<div class="text-center">
+        <h3 class="mb-3">Crear Nueva Pelicula</h3>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-success" type="submit" value="Guardar">
+    </form>
+</div>
+{% endblock %}

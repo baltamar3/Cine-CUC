@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content%}
+<div class="text-center">
+    <h1> login</h1>
+    {% if error %}
+    {{msj}}
+    {% endif %}
+    <form method="POST"> {% csrf_token %}
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <input class="btn-sm btn-success" type="submit" value="login">
+    </form>
+    <p>Crear cuenta <a href="{% url 'register' %}"><i>aquí</i></a></p>
+</div>
+{% endblock %}
